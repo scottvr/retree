@@ -1,3 +1,8 @@
+# This is Some instruction document, LLM output, or paste from a colleague's working system
+## You should create the following directory structure.
+### (I wish there was a better way than asking you to mkdir and touch from an ascii-graphical tree. Sorry.)
+
+```bash
 eert_example/
 ├── one/
 │   ├── 1file.py
@@ -8,3 +13,4 @@ eert_example/
 │   ├── bleh.py
 │   └── somedir/
 └── threedom/
+```
