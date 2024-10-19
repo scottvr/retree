@@ -4,11 +4,14 @@ vscode extension for the reverse tree utility
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+does the reverse/inverse of /usr/bin/tree as the eert python tool does, but does it from text highlighted in your vscode editor.
 
-For example if there is an image subfolder under your extension project workspace:
-
-[step 1](docs/images/ss-1.png)
+## example
+1. open the document with the reference tree: [step 1](docs/images/ss-1.png)
+2. highlight the tree in the editor window [step 2](docs/images/ss-2.png)
+3. open the command window (ctrl-shift-P) and select "Create directories from tree"  [step 3](docs/images/ss-3.png)
+4. If you want to create this somewhere other than your present working directory, this edit box is your opportuniy to do so. [step 4](docs/images/ss-4.png)
+6. Directory tree will be created as indented. [step 6🚡](docs/images/ss-6.png)
 
 > Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
 
