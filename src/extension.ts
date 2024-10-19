@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-function createFromTree(tree: string, rootDir: string = ".") {
+export function createFromTree(tree: string, rootDir: string = ".") {
     const lines = tree.split('\n').filter(line => line.trim() !== '');
 
     let currentPath = rootDir;
