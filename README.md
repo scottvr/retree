@@ -13,7 +13,7 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
 git clone https://github.com/scottvr/eert/
-cd eert/python
+cd eert/eert-python
 # copy a structure (but not file contents) from some example directory:
 tree -F /home/user/example | python eert.py
 # or from a file copied from a chat, document, etc:
