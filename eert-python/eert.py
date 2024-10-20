@@ -22,7 +22,7 @@ def create_from_tree(tree, root_dir="."):
         #print(f'Processing line: "{line}" (cleaned: "{cleaned_line}", indent: {current_indent})')
 
         # Determine if this is a directory or a file
-        is_directory = cleaned_line.endswith('/') or '.' not in cleaned_line
+        is_directory = cleaned_line.endswith('/') # or '.' not in cleaned_line
 
         while dir_stack and dir_stack[-1]["indent"] >= current_indent:
             dir_stack.pop()
@@ -47,7 +47,7 @@ def create_from_tree(tree, root_dir="."):
             current_path = new_dir_path
         else:
             # Create the file in the current directory
-            file_path = os.path.join(current_path, cleaned_line)  # Join with the current directory
+            file_path = os.path.join(current_path, cleaned_line.rstrip('*'))  # Join with the current directory
             with open(file_path, 'w') as f:
                 pass  # Create an empty file
             #print(f'Created file: {file_path}')
