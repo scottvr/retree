@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Function to count the indentation level based on tree characters
 count_indent() {
     local line="$1"
     # Extract only the tree characters and spaces
@@ -9,13 +8,11 @@ count_indent() {
     echo "${#tree_chars}"
 }
 
-# Function to clean the line from tree characters
 clean_line() {
     local line="$1"
     echo "$line" | sed 's/[│├└─]//g' | sed 's/^ *//' | sed 's/ *$//'
 }
 
-# Main function to process the tree and create filesystem
 create_from_tree() {
     # Initialize variables
     local root_dir="${1:-.}"
@@ -29,10 +26,8 @@ create_from_tree() {
         # Skip empty lines
         [[ -z "$(echo "$line" | tr -d '[:space:]')" ]] && continue
 
-        # Calculate indent level
         current_indent=$(($(count_indent "$line") / 2))
         
-        # Clean the line from tree characters
         cleaned_line=$(clean_line "$line")
         
         # Check if it's a directory (ends with /)
