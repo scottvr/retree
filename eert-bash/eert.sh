@@ -2,7 +2,8 @@
 
 count_indent() {
     local line="$1"
-    local tree_chars=$(echo "$line" | grep -o '[│├└─ ]' | tr -d '\n')
+    local tree_chars
+    tree_chars=$(echo "$line" | grep -o '[│├└─ ]' | tr -d '\n')
     echo "${#tree_chars}"
 }
 
@@ -41,7 +42,8 @@ create_from_tree() {
         [[ -z "$(echo "$line" | tr -d '[:space:]')" ]] && continue
 
         local current_indent=$(($(count_indent "$line") / 2))
-        local cleaned_line=$(clean_line "$line")
+        local cleaned_line
+        cleaned_line=$(clean_line "$line")
         
         while [[ ${indents[-1]} -ge $current_indent ]]; do
             unset 'paths[-1]'
@@ -70,4 +72,4 @@ create_from_tree() {
     done
 }
 
-create_from_tree
+create_from_tree "$1"
