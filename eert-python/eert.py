@@ -19,7 +19,7 @@ def create_from_tree(tree, root_dir="."):
         current_indent = calculate_indent(line)  # Calculate indent based on tree characters
         cleaned_line = ''.join(char for char in line if char not in '│├└─').strip()  # Clean up tree symbols
 
-        print(f'Processing line: "{line}" (cleaned: "{cleaned_line}", indent: {current_indent})')
+        #print(f'Processing line: "{line}" (cleaned: "{cleaned_line}", indent: {current_indent})')
 
         # Determine if this is a directory or a file
         is_directory = cleaned_line.endswith('/') or '.' not in cleaned_line
@@ -37,11 +37,11 @@ def create_from_tree(tree, root_dir="."):
             # Create the new directory
             new_dir_path = os.path.join(current_path, cleaned_line.rstrip('/'))  # Remove trailing slash
             os.makedirs(new_dir_path, exist_ok=True)
-            print(f'Created directory: {new_dir_path}')
+            #print(f'Created directory: {new_dir_path}')
 
             # Push the new directory onto the stack with its indent level
             dir_stack.append({"path": new_dir_path, "indent": current_indent})
-            print(f'Pushed to stack: {dir_stack}')
+            #print(f'Pushed to stack: {dir_stack}')
 
             # Update currentPath to this new directory
             current_path = new_dir_path
@@ -50,7 +50,7 @@ def create_from_tree(tree, root_dir="."):
             file_path = os.path.join(current_path, cleaned_line)  # Join with the current directory
             with open(file_path, 'w') as f:
                 pass  # Create an empty file
-            print(f'Created file: {file_path}')
+            #print(f'Created file: {file_path}')
 
 if __name__ == "__main__":
     # Read from stdin and call the function
