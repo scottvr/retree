@@ -33,3 +33,6 @@ $ tree -F
 
 ### Included also is a vscode extension that takes highlighted tree-format text, and creates a copy of the directory structure represented by it
 see the eert-vscx/ subdirectory. It has yet to be packaged so if you want to run it, open extension.ts within vscode and press F5. I'll get around to bundling it up eventually.
+
+Here's an example of usage within vscode :
+![the last image from a series of five showing usage with the vscode extension](eert-vscx/docs/images/ss-5.png)
