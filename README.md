@@ -7,7 +7,7 @@ Let's say a README shows you a tree listing, suggesting you create the same. Or 
 
 Or (as was my impetus for creating this) an LLM presents you with an example structure when you ask it to look at your code and suggest a sensible grouping of the classes within your single file into some nymber of seperate files for packaging in a library you plan to make public. 
 
-Sure, you could manually mkdir and touch files, or you could slowly watch it come into existence as you refactor your code into multiple directories and files, bu if you're like me, you want to see it on your filesystem *now* and make changes and piecemeal refactor bits here and there so it is convenient to have the structure already exist, even as empty files. (And of course, the ability to use a source of truth diagram in the form of a text art directory tree without the potential for fatfingering or overlooking something when creating a real layout on a real filesystem is an obvious plus.)
+Sure, you could manually mkdir and touch files, or you could slowly watch it come into existence as you refactor your code into multiple directories and files, bu if you're like me, you want to see it on your filesystem *now* and make changes and piecemeal refactor bits here and there, so you'd like to have the structure already exist, even as empty files. (And of course, the ability to use a source of truth diagram in the form of a text art directory tree without the potential for fatfingering or overlooking something when creating a real layout on a real filesystem is an obvious plus.)
 
 ## What? 
 ### Included is a Python tool that takes stdin and does the needful. for example 
