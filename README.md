@@ -4,10 +4,10 @@ This tool essentially inverts what /usr/bin/tree -F does. It creates a real dire
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
-eert$ cd python
-eert$ tree -F /home/user/example | python eert.py
+eert>$ cd python
+eert>$ tree -F /home/user/example | python eert.py
 # or from a file copied from a chat, document, etc
-eert$ python eert.py <  example_tree.txt 
+eert>$ python eert.py <  example_tree.txt 
 ```
 
 ### Included also is a vscode extension that takes highlighted tree-format text, and creates a copy of the directory structure represented by it
