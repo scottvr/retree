@@ -4,38 +4,21 @@ vscode extension for the reverse tree utility
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+does the reverse/inverse of /usr/bin/tree as the eert python tool does, but does it from text highlighted in your vscode editor.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## example
+1. open the document with the reference tree: [step 1](docs/images/ss-1.png)
+2. highlight the tree in the editor window [step 2](docs/images/ss-2.png)
+3. open the command window (ctrl-shift-P) and select "Create directories from tree"  [step 3](docs/images/ss-3.png)
+4. If you want to create this somewhere other than your present working directory, this edit box is your opportuniy to do so. [step 4](docs/images/ss-4.png)
+6. Directory tree will be created as indented. [step 6🚡](docs/images/ss-6.png)
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
 ## Extension Settings
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
+No persistent settings, the rootDir is asked for wach time you run thge command, with sensible options if you choose not to answer.
+ ### 1.0.0
 
 Initial release of ...
 
