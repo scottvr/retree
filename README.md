@@ -45,3 +45,6 @@ see the eert-vscx/ subdirectory. It has yet to be packaged so if you want to run
 Here's an example of usage within vscode :
 
 ![the last image from a series of five showing usage with the vscode extension](eert-vscx/docs/images/ss-5.png)
+
+### Disclaimer
+Th is is a utility made from desire and necessity to perform a specific purpose. Utilitarian. I likely would have kept it to myself except that once I spent the time to get it working within vscode, it occurred to me that I *might* not be the only person who has ever wished this to exist, so just in case, I thought I'd put this here for you. Point being, it is not whistles and bells, not command-line options or visual elements, etc. and probably never will have those things. (Unless a PR comes in with them showing that a) I am really not alone on this one and b) oh well, I guess again, I'm not alone.)
