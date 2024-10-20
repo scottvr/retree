@@ -4,7 +4,7 @@ import * as path from 'path';
 
 export function createFromTree(tree: string, rootDir: string = ".") {
     const lines = tree.split('\n').filter(line => line.trim() !== '');
-
+    console.log(process.cwd()); 
     let currentPath = rootDir;
     let dirStack = [{ path: currentPath, indent: -1 }];
     
