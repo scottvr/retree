@@ -51,4 +51,4 @@ Th is is a utility made from desire and necessity to perform a specific purpose.
 
 If it remains forever minimalist, unseen and unused by anyone else, I am ok with that. I am quite accustomed to creating things for myself that apparently only I have any desire to exist. (See also my art, musings, music, etc.)
 
-By me, for me, bu thappy to share.  
+By me, for me, but happy to share.  
