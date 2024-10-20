@@ -9,7 +9,26 @@ cd eert/python
 # copy a structure (but not file contents) from some example directory:
 tree -F /home/user/example | python eert.py
 # or from a file copied from a chat, document, etc:
-python eert.py <  example_tree.txt 
+$ mkdir test && cd test
+$ tree -F
+./
+
+0 directories, 0 files
+$ python ../eert.py < ../example_tree.txt
+$ tree -F
+./
+└── eert_example/
+    ├── one/
+    │   ├── 1file.py*
+    │   ├── 2file.txt*
+    │   └── 3file/
+    ├── threedom/
+    └── two/
+        ├── blah.py*
+        ├── bleh.py*
+        └── somedir/
+
+7 directories, 4 files
 ```
 
 ### Included also is a vscode extension that takes highlighted tree-format text, and creates a copy of the directory structure represented by it
