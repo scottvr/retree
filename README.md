@@ -4,7 +4,7 @@ This tool essentially inverts what /usr/bin/tree -F does. It creates a real dire
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
-git clone https://ithub.com/scottvr/eert/
+git clone https://github.com/scottvr/eert/
 cd eert/python
 # copy a structure (but not file contents) from some example directory:
 tree -F /home/user/example | python eert.py
