@@ -11,7 +11,7 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 
 ## What? 
 ### Now included is a bash version because I nerd-sniped myself after answering a decade+ old question asking how to accomplish this in bash.
-My answer on stackoverflow showed the usage from the python script below, but after I posted it the answer, it bothered me that the question was posted as a bash question and my answer required python. So...
+[My answer on stackoverflow](https://stackoverflow.com/a/79106673/27893564) showed the usage from the python script below, but after I posted it the answer, it bothered me that the question was posted as a bash question and my answer required python. So...
 
 ```bash
 $ git clone https://github.com/scottvr/eert/
