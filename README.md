@@ -1,6 +1,6 @@
 # eert - inverse tree utility
 
-This tool essentially inverts what /usr/bin/tree -F does. It creates a real directory structure on your filesystem based on an ascii-lin/box art tree. 
+This tool essentially inverts what /usr/bin/tree -F does. It creates a real directory structure on your filesystem based on an ascii line-art tree. 
 
 ### There is a Python tool that takes stdin and does the needful. for example 
 ```bash
