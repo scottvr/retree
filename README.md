@@ -10,6 +10,34 @@ Or (as was my impetus for creating this) an LLM presents you with an example str
 Sure, you could manually mkdir and touch files, or you could slowly watch it come into existence as you refactor your code into multiple directories and files, but if you're like me, you want to see it on your filesystem *now* and make changes and piecemeal refactor bits here and there, so you'd like to have the structure already exist, even as empty files. (And of course, the ability to use a source of truth diagram in the form of a text art directory tree without the potential for fatfingering or overlooking something when creating a real layout on a real filesystem is an obvious plus.)
 
 ## What? 
+### Now included is a bash version because I nerd-sniped myself after answering a decade+ old question asking how to accomplish this in bash.
+My answer on stackoverflow showed the usage from the python script below, but after I posted it the answer, it bothered me that the question was posted as a bash question and my answer required python. So...
+
+```bash
+$ git clone https://github.com/scottvr/eert/
+$ cd eert/eert-bash
+$ tree
+.
+
+0 directories, 0 files
+
+$ mkdir test && cd test
+$ bash ../eert.sh < ../../example_tree.txt
+$ tree
+.
+└── eert_example
+    ├── one
+    │   ├──     1file.py
+    │   ├──     2file.txt
+    │   └──     3file
+    ├── threedom
+    └── two
+        ├──     blah.py
+        ├──     bleh.py
+        └──     somedir
+
+6 directories, 5 files
+
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
 git clone https://github.com/scottvr/eert/
