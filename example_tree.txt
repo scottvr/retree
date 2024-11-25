@@ -1,10 +1,10 @@
 eert_example/
 ├── one/
-│   ├── 1file.py
-│   ├── 2file.txt
-│   └── 3file
+│   ├── 1file.py*
+│   ├── 2file.txt*
+│   └── 3file*
 ├── two/
-│   ├── blah.py
-│   ├── bleh.py
+│   ├── blah.py*
+│   ├── bleh.py*
 │   └── somedir/
 └── threedom/
