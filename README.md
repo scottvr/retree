@@ -18,8 +18,9 @@ $ git clone https://github.com/scottvr/eert/
 $ cd eert/eert-bash
 $ tree
 .
+└── eert.sh
 
-0 directories, 0 files
+0 directories, 1 file
 
 $ mkdir test && cd test
 $ bash ../eert.sh < ../../example_tree.txt
