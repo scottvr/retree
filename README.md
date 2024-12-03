@@ -38,6 +38,7 @@ $ tree
         └──     somedir
 
 6 directories, 5 files
+```
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
