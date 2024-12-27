@@ -1,5 +1,7 @@
 # eert - inverse tree utility
 
+(oops. I guess I renamed the repo, but not the directories or docs yet. *"You moved the headstones but you left the bodies!!?!"* )
+
 This tool essentially inverts what /usr/bin/tree -F does. It creates a real directory structure on your filesystem based on an ascii line-art tree. 
 
 ## Why?
