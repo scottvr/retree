@@ -10,7 +10,8 @@ def calculate_indent(line):
     return char_count // 2
 
 def create_from_tree(tree, root_dir="."):
-    lines = [line for line in tree.splitlines() if line.strip() != '']
+    #lines = [line for line in tree.splitlines() if line.strip() != '']
+    lines = [line.split('#')[0].rstrip() for line in tree.splitlines() if line.split('#')[0].strip() != '']
 
     current_path = root_dir
     dir_stack = [{"path": current_path, "indent": -1}]
