@@ -1,10 +1,10 @@
-# eert README
+# retree README
 
 vscode extension for the reverse tree utility
 
 ## Features
 
-does the reverse/inverse of /usr/bin/tree as the eert python tool does, but does it from text highlighted in your vscode editor.
+does the reverse/inverse of /usr/bin/tree as the retree python tool does, but does it from text highlighted in your vscode editor.
 
 ## example
 1. open the document with the reference tree: [step 1](docs/images/ss-1.png)

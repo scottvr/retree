@@ -1,4 +1,4 @@
-eert_example/
+retree_example/
 ├── one/
 │   ├── 1file.py*
 │   ├── 2file.txt*

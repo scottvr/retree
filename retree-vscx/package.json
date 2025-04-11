@@ -1,6 +1,6 @@
 {
-  "name": "eert",
-  "displayName": "eert",
+  "name": "retree",
+  "displayName": "retree",
   "description": "Reverse tree(1) command. Takes as input a directory tree/file layout from text (such as the output of /usr/bin/tree)  and and causes it to exist under the current directory.",
   "version": "0.0.1",
   "engines": {

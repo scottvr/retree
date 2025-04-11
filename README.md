@@ -1,4 +1,4 @@
-# eert - inverse tree utility
+# retree - inverse tree utility
 
 (oops. I guess I renamed the repo, but not the directories or docs yet. *"You moved the headstones but you left the bodies!!?!"* )
 
@@ -16,19 +16,19 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 [My answer on stackoverflow](https://stackoverflow.com/a/79106673/27893564) showed the usage from the python script below, but after I posted the answer, it bothered me that the question was asked as a bash question and my answer required python. So...
 
 ```bash
-$ git clone https://github.com/scottvr/eert/
-$ cd eert/eert-bash
+$ git clone https://github.com/scottvr/retree/
+$ cd retree/retree-bash
 $ tree
 .
-└── eert.sh
+└── retree.sh
 
 0 directories, 1 file
 
 $ mkdir test && cd test
-$ bash ../eert.sh < ../../example_tree.txt
+$ bash ../retree.sh < ../../example_tree.txt
 $ tree
 .
-└── eert_example
+└── retree_example
     ├── one
     │   ├──     1file.py
     │   ├──     2file.txt
@@ -44,20 +44,20 @@ $ tree
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
-git clone https://github.com/scottvr/eert/
-cd eert/eert-python
+git clone https://github.com/scottvr/retree/
+cd retree/retree-python
 # copy a structure (but not file contents) from some example directory:
-tree -F /home/user/example | python eert.py
+tree -F /home/user/example | python retree.py
 # or from a file copied from a chat, document, etc:
 $ mkdir test && cd test
 $ tree -F
 ./
 
 0 directories, 0 files
-$ python ../eert.py < ../example_tree.txt
+$ python ../retree.py < ../example_tree.txt
 $ tree -F
 ./
-└── eert_example/
+└── retree_example/
     ├── one/
     │   ├── 1file.py*
     │   ├── 2file.txt*
@@ -72,11 +72,11 @@ $ tree -F
 ```
 
 ### Included also is a vscode extension that takes highlighted tree-format text, and creates a copy of the directory structure represented by it
-see the eert-vscx/ subdirectory. It has yet to be packaged so if you want to run it, open extension.ts within vscode and press F5. I'll get around to bundling it up eventually.
+see the retree-vscx/ subdirectory. It has yet to be packaged so if you want to run it, open extension.ts within vscode and press F5. I'll get around to bundling it up eventually.
 
 Here's an example of usage within vscode :
 
-![the last image from a series of five showing usage with the vscode extension](eert-vscx/docs/images/ss-5.png)
+![the last image from a series of five showing usage with the vscode extension](retree-vscx/docs/images/ss-5.png)
 
 ### Disclaimer
 This is a utility made from desire and necessity to perform a specific purpose. Utilitarian. I likely would have kept it to myself except that once I spent the time to get it working within vscode, it occurred to me that I *might* not be the only person who has ever wished this to exist, so just in case, I thought I'd put this here for you. 

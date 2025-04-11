@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { activate, deactivate, createFromTree } from '../extension'; // Adjust the path as necessary
 
-suite('EERT Extension Test Suite', () => {
+suite('retree Extension Test Suite', () => {
     const testRootDir = path.join(__dirname, 'testDir'); // Temporary test directory
 
     // Setup: Create a temporary directory for testing
