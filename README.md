@@ -1,4 +1,4 @@
-### a recent attempt to use it shows I broke something im the python version. 
+### a recent attempt to use it shows I broke something in the python version. 
 
 the pure bash and vscode extension are still working. 
 
