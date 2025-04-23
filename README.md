@@ -44,7 +44,7 @@ $ tree
 6 directories, 5 files
 ```
 
-### example_tree haiku
+"example_tree haiku"
 ---
 retree_example/  
 branches split, names whispering  
