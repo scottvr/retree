@@ -2,12 +2,9 @@ import os
 import sys
 
 def calculate_indent(line):
-    # Match both tree symbols and leading whitespace
-    match = ''.join(char for char in line if char in '│├└─ ')
-    char_count = len(match)
+    """Determine nesting level by counting tree characters."""
+    return line.count('│') + line.count('├') + line.count('└')
 
-    # Divide by 2, assuming two characters represent one indentation level
-    return char_count // 2
 
 def create_from_tree(tree, root_dir="."):
     #lines = [line for line in tree.splitlines() if line.strip() != '']
