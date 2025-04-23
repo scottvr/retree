@@ -1,6 +1,6 @@
 ###~~a recent attempt to use it shows I broke something in the python version.~~
 
-the pure bashi, python, and vscode extension versions are all working. 
+the pure bash, python, and vscode extension versions are all working. 
 
 # retree - inverse tree utility
 
