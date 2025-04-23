@@ -60,7 +60,7 @@ $ tree -F
     ├── threedom
     │   ├──    a name, not a count
     │   ├──    boldly standing on its own
-    │   └── liberation lives
+    │   └──    liberation lives
     └── two
     │   ├──    blah and bleh debate
     │   ├──    code or noise — both wear .py
