@@ -254,14 +254,37 @@ convert_to_tree() {
     esac
 }
 
-# Simple version of generate_tree
+# generate_tree: Pure bash version replacing find, for irony and independence
+# The original version used:
+# generate_tree() {
+#     local dir="${1:-.}"
+#     echo "Directory: $dir"
+#     find "$dir" -type f -o -type d | sort
+# }
+# But since this whole thing started as a joke about NOT using anything but bash...
+# here's a version that does it the hard way
+
 generate_tree() {
     local dir="${1:-.}"
-    echo "Directory: $dir"
-    find "$dir" -type f -o -type d | sort
+    local indent="${2:-}"
+
+    shopt -s nullglob dotglob  # Include hidden files and handle empty globs
+
+    for entry in "$dir"/*; do
+        if [[ ${OPTS[dirsonly]} -eq 1 && -f "$entry" ]]; then
+            continue
+        fi
+        if [[ -d "$entry" ]]; then
+            echo "$entry"
+            generate_tree "$entry"
+        elif [[ -f "$entry" ]]; then
+            echo "$entry"
+        fi
+    done
+
+    shopt -u nullglob dotglob
 }
 
-# Main logic
 main() {
     parse_args "$@"
     
