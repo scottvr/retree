@@ -44,27 +44,27 @@ $ tree -F
 6 directories, 5 files
 ```
 
-### example_tree above, described in haiku
+### example_tree above, as haiku
 ---
 
 ```
 .
 └── retree_example/
-retree_example
-branches split, names whispering  
-of purpose not yet
+    ├──    retree_example
+    ├──    branches split,
+    ├──    names speak no purpose
     ├── one
-    three files lie in wait  
-    Python, text, the mystery  
-    of the third unnamed
+    │   ├──    three files lie in wait  
+    │   ├──    Python, text, the mystery  
+    │   └──    of the third unnamed
     ├── threedom
-    a name, not a count  
-    boldly standing on its own  
-    liberation lives
+    │   ├──    a name, not a count
+    │   ├──    boldly standing on its own
+    │   └── liberation lives
     └── two
-    blah and bleh debate
-    code or noise — both wear .py
-    somedir just shrugs
+    │   ├──    blah and bleh debate
+    │   ├──    code or noise — both wear .py
+    │   └──    somedir just shrugs
 ```
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
