@@ -20,53 +20,52 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 ```bash
 $ git clone https://github.com/scottvr/retree/
 $ cd retree/retree-bash
-$ tree
+$ tree -F
 .
-└── retree.sh
+└── retree.sh*
 
 0 directories, 1 file
 
 $ mkdir test && cd test
 $ bash ../retree.sh < ../../example_tree.txt
-$ tree
+$ tree -F
 .
 └── retree_example
     ├── one
-    │   ├──     1file.py
-    │   ├──     2file.txt
+    │   ├──     1file.py*
+    │   ├──     2file.txt*
     │   └──     3file
     ├── threedom
     └── two
-        ├──     blah.py
-        ├──     bleh.py
+        ├──     blah.py*
+        ├──     bleh.py*
         └──     somedir
 
 6 directories, 5 files
 ```
 
-### example_tree haiku
+### example_tree above, described in haiku
 ---
-retree_example/  
+
+```
+.
+└── retree_example/
+retree_example
 branches split, names whispering  
 of purpose not yet
-
-  "one"
-  ---
-  three files lie in wait  
-  Python, text, the mystery  
-  of the third unnamed
-
-  "two"
-  ---
-  blah and bleh debate  
-  code or noise — both wear .py  
-  somedir just shrugs
-
-  "threedom"
-  ---
-  a name, not a count  
-  boldly standing on its own  
-  liberation lives
+    ├── one
+    three files lie in wait  
+    Python, text, the mystery  
+    of the third unnamed
+    ├── threedom
+    a name, not a count  
+    boldly standing on its own  
+    liberation lives
+    └── two
+    blah and bleh debate
+    code or noise — both wear .py
+    somedir just shrugs
+```
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
