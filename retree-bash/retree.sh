@@ -266,23 +266,44 @@ convert_to_tree() {
 
 generate_tree() {
     local dir="${1:-.}"
-    local indent="${2:-}"
+    local depth="${2:-0}"
 
-    shopt -s nullglob dotglob  # Include hidden files and handle empty globs
+    # Save current shell options to restore later
+    local old_dotglob old_nullglob
+    old_dotglob=$(shopt -p dotglob)
+    old_nullglob=$(shopt -p nullglob)
+
+    # Set options based on flags
+    [[ ${OPTS[showhidden]} -eq 1 ]] && shopt -s dotglob || shopt -u dotglob
+    shopt -s nullglob  # Always enable nullglob for safety
 
     for entry in "$dir"/*; do
-        if [[ ${OPTS[dirsonly]} -eq 1 && -f "$entry" ]]; then
+        # Skip unreadables/broken symlinks
+        [[ ! -e "$entry" ]] && continue
+
+        local is_dir=0
+        if [[ ${OPTS[followlinks]} -eq 1 ]]; then
+            [[ -d "$entry" ]] && is_dir=1
+        else
+            [[ -d "$entry" && ! -L "$entry" ]] && is_dir=1
+        fi
+
+        # Honor max depth
+        if [[ ${OPTS[maxdepth]} -ge 0 && $depth -ge ${OPTS[maxdepth]} ]]; then
             continue
         fi
-        if [[ -d "$entry" ]]; then
+
+        if [[ $is_dir -eq 1 ]]; then
             echo "$entry"
-            generate_tree "$entry"
-        elif [[ -f "$entry" ]]; then
+            generate_tree "$entry" $((depth + 1))
+        elif [[ ${OPTS[dirsonly]} -eq 0 && -f "$entry" ]]; then
             echo "$entry"
         fi
     done
 
-    shopt -u nullglob dotglob
+    # Restore shell options
+    eval "$old_dotglob"
+    eval "$old_nullglob"
 }
 
 main() {

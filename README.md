@@ -44,6 +44,26 @@ $ tree
 6 directories, 5 files
 ```
 
+### example_tree haiku
+retree_example/  
+branches split, names whispering  
+of purpose not yet
+
+  "one"
+  three files lie in wait  
+  Python, text, the mystery  
+  of the third unnamed
+
+  "two"
+  blah and bleh debate  
+  code or noise — both wear .py  
+  somedir just shrugs
+
+  "threedom"
+  a name, not a count  
+  boldly standing on its own  
+  liberation lives
+
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
 git clone https://github.com/scottvr/retree/
