@@ -45,6 +45,7 @@ $ tree
 ```
 
 ### example_tree haiku
+---
 retree_example/  
 branches split, names whispering  
 of purpose not yet
@@ -56,11 +57,13 @@ of purpose not yet
   of the third unnamed
 
   "two"
+  ---
   blah and bleh debate  
   code or noise — both wear .py  
   somedir just shrugs
 
   "threedom"
+  ---
   a name, not a count  
   boldly standing on its own  
   liberation lives
