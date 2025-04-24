@@ -34,14 +34,12 @@ $ tree -F
     ├── one
     │   ├──     1file.py*
     │   ├──     2file.txt*
-    │   └──     3file
+    │   └──     3file*
     ├── threedom
     └── two
         ├──     blah.py*
         ├──     bleh.py*
         └──     somedir
-
-6 directories, 5 files
 ```
 
 ### example_tree above, as haiku
