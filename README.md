@@ -62,9 +62,9 @@ $ tree -F
     │   ├──    boldly standing on its own
     │   └──    liberation lives
     └── two
-    │   ├──    blah and bleh debate
-    │   ├──    code or noise — both wear .py
-    │   └──    somedir just shrugs
+        ├──    blah and bleh debate
+        ├──    code or noise — both wear .py
+        └──    somedir just shrugs
 ```
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
