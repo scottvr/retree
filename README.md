@@ -1,7 +1,3 @@
-###~~a recent attempt to use it shows I broke something in the python version.~~
-
-the pure bash, python, and vscode extension versions are all working. 
-
 # retree - inverse tree utility
 
 This tool essentially inverts what /usr/bin/tree -F does. It creates a real directory structure on your filesystem based on an ascii line-art tree. 
