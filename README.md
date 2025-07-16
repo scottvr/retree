@@ -1,7 +1,3 @@
-###~~a recent attempt to use it shows I broke something in the python version.~~
-
-the pure bash, python, and vscode extension versions are all working. 
-
 # retree - inverse tree utility
 
 This tool essentially inverts what /usr/bin/tree -F does. It creates a real directory structure on your filesystem based on an ascii line-art tree. 
@@ -20,53 +16,50 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 ```bash
 $ git clone https://github.com/scottvr/retree/
 $ cd retree/retree-bash
-$ tree
+$ tree -F
 .
-└── retree.sh
+└── retree.sh*
 
 0 directories, 1 file
 
 $ mkdir test && cd test
 $ bash ../retree.sh < ../../example_tree.txt
-$ tree
+$ tree -F
 .
 └── retree_example
     ├── one
-    │   ├──     1file.py
-    │   ├──     2file.txt
-    │   └──     3file
+    │   ├──     1file.py*
+    │   ├──     2file.txt*
+    │   └──     3file*
     ├── threedom
     └── two
-        ├──     blah.py
-        ├──     bleh.py
+        ├──     blah.py*
+        ├──     bleh.py*
         └──     somedir
-
-6 directories, 5 files
 ```
 
-"example_tree haiku"
+### example_tree above, as haiku
 ---
-retree_example/  
-branches split, names whispering  
-of purpose not yet
 
-  "one"
-  ---
-  three files lie in wait  
-  Python, text, the mystery  
-  of the third unnamed
-
-  "two"
-  ---
-  blah and bleh debate  
-  code or noise — both wear .py  
-  somedir just shrugs
-
-  "threedom"
-  ---
-  a name, not a count  
-  boldly standing on its own  
-  liberation lives
+```
+.
+└── retree_example/
+    ├──    retree_example
+    ├──    branches split,
+    ├──    names speak no purpose
+    ├── one
+    │   ├──    three files lie in wait  
+    │   ├──    Python, text, the mystery  
+    │   └──    of the third unnamed
+    ├── threedom
+    │   ├──    a name, not a count
+    │   ├──    boldly standing on its own
+    │   └──    liberation lives
+    └── two
+        ├──    blah and bleh debate
+        ├──    code or noise — both wear .py
+        └──    somedir just shrugs
+```
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
