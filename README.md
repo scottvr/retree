@@ -41,28 +41,6 @@ $ tree -F
         └──     somedir
 ```
 
-### example_tree above, as haiku
----
-
-```
-.
-└── retree_example/
-    ├──    retree_example
-    ├──    branches split,
-    ├──    names speak no purpose
-    ├── one
-    │   ├──    three files lie in wait  
-    │   ├──    Python, text, the mystery  
-    │   └──    of the third unnamed
-    ├── threedom
-    │   ├──    a name, not a count
-    │   ├──    boldly standing on its own
-    │   └──    liberation lives
-    └── two
-        ├──    blah and bleh debate
-        ├──    code or noise — both wear .py
-        └──    somedir just shrugs
-```
 
 ### Included is a Python tool that takes stdin and does the needful. for example 
 ```bash
