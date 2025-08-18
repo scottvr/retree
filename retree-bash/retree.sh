@@ -6,7 +6,6 @@ declare -A OPTS=(
     [maxdepth]=-1       # Maximum depth (-1 for unlimited)
     [followlinks]=0     # Follow symbolic links
     [showhidden]=0      # Show hidden files
-    [output_format]="tree"  # Output format: tree, paths, or json
     [input_format]="auto"   # Input format: auto, tree, paths, or ls-r
     [debug]=0           # Enable debug output (0=off, 1=on)
 )
@@ -27,7 +26,6 @@ Options:
     -D, --max-depth N   Limit directory recursion depth
     -f, --follow        Follow symbolic links
     -a, --all           Show hidden files
-    -o, --output FORMAT Output format (tree|paths|json)
     -i, --input FORMAT  Input format (auto|tree|paths|ls-r)
     -h, --help          Show this help message
     --debug             Enable debug output
@@ -44,7 +42,6 @@ parse_args() {
             -D|--max-depth) OPTS[maxdepth]="$2"; shift ;;
             -f|--follow) OPTS[followlinks]=1 ;;
             -a|--all) OPTS[showhidden]=1 ;;
-            -o|--output) OPTS[output_format]="$2"; shift ;;
             -i|--input) OPTS[input_format]="$2"; shift ;;
             --debug) OPTS[debug]=1 ;;
             -h|--help) usage ;;
