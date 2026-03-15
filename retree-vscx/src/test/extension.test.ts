@@ -16,7 +16,7 @@ suite('retree Extension Test Suite', () => {
 
     // Cleanup: Remove the test directory after tests
     teardown(() => {
-        fs.rmdirSync(testRootDir, { recursive: true });
+        fs.rmSync(testRootDir, { recursive: true });
     });
 
     test('Create directory structure from tree', async () => {
