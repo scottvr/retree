@@ -3,3 +3,32 @@ dist
 node_modules
 .vscode-test/
 *.vsix
+
+# Dependencies
+node_modules
+
+# Build artifacts
+out
+dist
+
+# VSIX file
+*.vsix
+
+# VS Code Test Data
+.vscode-test/
+.vscode-test-web/
+.vscode-storage/
+
+# VS Code-specific files (optional, many teams commit some of these)
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/settings.json
+.vscode/extensions.json
+.vscode/*.code-snippets
+
+# Environment variables
+.env
+.npmrc
+
+# Local history (if using the Local History extension)
+.history/
