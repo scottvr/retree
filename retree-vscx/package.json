@@ -27,7 +27,6 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:retree.createFromTree"
   ],
   "main": "./out/extension.js",
   "contributes": {
