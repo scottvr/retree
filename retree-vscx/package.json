@@ -1,23 +1,41 @@
 {
   "name": "retree",
   "displayName": "retree",
-  "description": "Reverse tree(1) command. Takes as input a directory tree/file layout from text (such as the output of /usr/bin/tree)  and and causes it to exist under the current directory.",
-  "version": "0.0.1",
+  "description": "Inverse tree(1): create directories and files from tree -F style text selected in the editor.",
+  "version": "0.1.0",
+  "publisher": "scottvr",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scottvr/retree.git"
+  },
+  "homepage": "https://github.com/scottvr/retree",
+  "bugs": {
+    "url": "https://github.com/scottvr/retree/issues"
+  },
   "engines": {
     "vscode": "^1.94.0"
   },
+  "keywords": [
+    "tree",
+    "filesystem",
+    "scaffold",
+    "directory",
+    "retree"
+  ],
   "categories": [
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.createFromTree"
+    "onCommand:retree.createFromTree"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.createFromTree",
-        "title": "Create Directories from Tree"
+        "command": "retree.createFromTree",
+        "title": "Create Directories from Tree",
+        "category": "Retree"
       }
     ]
   },
@@ -25,6 +43,7 @@
     "vscode:prepublish": "npm run compile",
     "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
+    "package": "vsce package",
     "pretest": "npm run compile && npm run lint",
     "lint": "eslint src",
     "test": "vscode-test"
@@ -37,6 +56,7 @@
     "@typescript-eslint/parser": "^8.7.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.7.1",
     "eslint": "^9.11.1",
     "typescript": "^5.6.2"
   }

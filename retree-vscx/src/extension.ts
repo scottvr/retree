@@ -61,7 +61,7 @@ export function createFromTree(tree: string, rootDir: string = ".") {
 
 // Command implementation for the VS Code extension
 export function activate(context: vscode.ExtensionContext) {
-    const disposable = vscode.commands.registerCommand('extension.createFromTree', () => {
+    const disposable = vscode.commands.registerCommand('retree.createFromTree', () => {
         const editor = vscode.window.activeTextEditor;
 
         if (editor) {

@@ -1,54 +1,53 @@
-# retree README
+# retree
 
-vscode extension for the reverse tree utility
+`retree` is a VS Code extension that performs the inverse of `tree -F`:
+it creates directories/files from selected tree text. It is included as a subdirectory
+in the repo https://github.com/scottvr/retree
 
-## Features
+## Usage
 
-does the reverse/inverse of /usr/bin/tree as the retree python tool does, but does it from text highlighted in your vscode editor.
+1. Select tree text in the editor.
+2. Run `Retree: Create Directories from Tree` from the Command Palette.
+3. Enter a destination root directory, or accept the default workspace path.
 
-## example
-1. open the document with the reference tree: [step 1](docs/images/ss-1.png)
-2. highlight the tree in the editor window [step 2](docs/images/ss-2.png)
-3. open the command window (ctrl-shift-P) and select "Create directories from tree"  [step 3](docs/images/ss-3.png)
-4. If you want to create this somewhere other than your present working directory, this edit box is your opportuniy to do so. [step 4](docs/images/ss-4.png)
-6. Directory tree will be created as indented. [step 6🚡](docs/images/ss-6.png)
+## Example
 
-## Requirements
+1. Open a document with a tree layout.
+2. Highlight the tree text.
+3. Run the command from the Command Palette.
+4. Optionally change the destination root directory.
+5. Files/directories are created under that root.
 
-## Extension Settings
+## Package As VSIX
 
-No persistent settings, the rootDir is asked for wach time you run thge command, with sensible options if you choose not to answer.
- ### 1.0.0
+```bash
+npm ci
+npm run compile
+npm run package
+```
 
-Initial release of ...
+This creates `retree-<version>.vsix` in the project root.
 
-### 1.0.1
+## Install Locally
 
-Fixed issue #.
+```bash
+code --install-extension retree-0.1.0.vsix
+```
 
-### 1.1.0
+or use VS Code: `Extensions` -> `...` -> `Install from VSIX...`.
 
-Added features X, Y, and Z.
+## Publish To Marketplace
 
----
+1. Create a publisher in Azure DevOps/VS Marketplace.
+2. Set `"publisher"` in `package.json` to that publisher ID.
+3. Authenticate `vsce` with a Personal Access Token:
 
-## Following extension guidelines
+```bash
+npx vsce login <publisher-id>
+```
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+4. Publish:
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+```bash
+npx vsce publish
+```
