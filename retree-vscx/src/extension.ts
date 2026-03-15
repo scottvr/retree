@@ -7,6 +7,8 @@ type ParsedNode = {
     name: string;
     explicitDirectory: boolean;
     explicitFile: boolean;
+    explicitSymlink: boolean;
+    executable: boolean;
 };
 
 type CreateResult = {
@@ -43,9 +45,11 @@ function parseLine(rawLine: string): ParsedNode | null {
     }
 
     const explicitDirectory = entryWithMarkers.endsWith('/');
-    const explicitFile = entryWithMarkers.endsWith('*') || /\.[^./\s]+$/.test(entryWithMarkers);
+    const explicitSymlink = entryWithMarkers.endsWith('@');
+    const executable = entryWithMarkers.endsWith('*');
+    const explicitFile = explicitSymlink || executable || /\.[^./\s]+$/.test(entryWithMarkers);
 
-    const name = entryWithMarkers.replace(/[/*]+$/, '').trim();
+    const name = entryWithMarkers.replace(/[/*@]+$/, '').trim();
     if (!name || name === '.' || name === '..') {
         return null;
     }
@@ -55,6 +59,8 @@ function parseLine(rawLine: string): ParsedNode | null {
         name,
         explicitDirectory,
         explicitFile,
+        explicitSymlink,
+        executable,
     };
 }
 
@@ -96,6 +102,9 @@ export function createFromTree(tree: string, rootDir: string = '.'): CreateResul
             } else {
                 fs.mkdirSync(parentPath, { recursive: true });
                 fs.writeFileSync(targetPath, '', { flag: 'w' });
+                if (node.executable && process.platform !== 'win32') {
+                    fs.chmodSync(targetPath, 0o744);
+                }
                 createdFiles += 1;
             }
         } catch (error) {

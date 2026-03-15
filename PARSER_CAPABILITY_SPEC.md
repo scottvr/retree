@@ -7,7 +7,7 @@ Unify parser behavior across all four implementations:
 - `retree-go/main.go`
 - `retree-vscx/src/extension.ts`
 
-## Current Capability Matrix
+## Baseline Drift Snapshot (Before Alignment)
 Legend: `Y` = supported, `P` = partial/inconsistent, `N` = not supported.
 
 | Capability | Bash | Python | Go | VS Code TS |
@@ -73,6 +73,26 @@ Per parsed node:
 - Continue processing after per-entry errors.
 - Return/report summary: created dirs, created files, error count, first error.
 
+## Alignment Status (2026-03-15)
+
+| Capability | Bash | Python | Go | VS Code TS |
+|---|---:|---:|---:|---:|
+| Unicode line-art | Y | Y | Y | Y |
+| ASCII line-art | Y | Y | Y | Y |
+| Indent-only hierarchy | Y | Y | Y | Y |
+| Inline comments `# // /* ;` | Y | Y | Y | Y |
+| Tabs in indentation | Y | Y | Y | Y |
+| `/` directory marker | Y | Y | Y | Y |
+| `*` executable marker parse | Y | Y | Y | Y |
+| `@` symlink marker parse | Y | Y | Y | Y |
+| Lookahead directory inference | Y | Y | Y | Y |
+| Continue-on-error summaries | Y | Y | Y | Y |
+
+Verification notes:
+1. Python, Bash, and VS Code TS were executed against both fixture styles and produced equivalent trees.
+2. Go was runtime-verified with `go run retree-go/main.go` against both fixture styles and produced equivalent trees.
+3. DOS `tree` full dialect parsing remains out of scope; current behavior is generic prefix/indent parsing only.
+
 ## Explicit Non-Goals (for now)
 1. True symlink target reconstruction from tree output (target path is absent in plain tree text).
 2. Round-tripping metadata (owner/perms/timestamps).
@@ -84,9 +104,3 @@ Per parsed node:
 2. Path traversal guardrails (`..`, absolute paths) for safer default behavior.
 3. Conflict policy: skip/overwrite/prompt on existing files.
 4. Shared cross-language golden test fixtures to prevent drift.
-
-## Convergence Plan
-1. Lock this spec.
-2. Port parser core in each implementation to match sections 1-7.
-3. Add a shared fixture folder with expected outputs and a tiny runner per language.
-4. Verify parity before adding advanced formats.

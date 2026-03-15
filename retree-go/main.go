@@ -1,96 +1,181 @@
-// File: main.go
 package main
 
 import (
 	"bufio"
 	"fmt"
 	"os"
-	"strings"
 	"path/filepath"
+	"regexp"
+	"runtime"
+	"strings"
 )
 
-type DirEntry struct {
-	Path   string
-	Indent int
+type parsedNode struct {
+	Depth             int
+	Name              string
+	ExplicitDirectory bool
+	ExplicitFile      bool
+	ExplicitSymlink   bool
+	Executable        bool
+	IsDirectory       bool
 }
 
-func calculateIndent(line string) int {
-	count := 0
-	for _, ch := range line {
-		if strings.ContainsRune("│├└", ch) {
-			count++
+type createResult struct {
+	CreatedDirs  int
+	CreatedFiles int
+	Errors       []string
+}
+
+var (
+	commentRe   = regexp.MustCompile(`\s+(?:#|;|//|/\*).*$`)
+	leadingRe   = regexp.MustCompile(`^[\s│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+` + "`" + `\\-]*`)
+	treeStripRe = regexp.MustCompile(`^[\s│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+` + "`" + `\\-]+`)
+	treeCharsRe = regexp.MustCompile(`[│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+` + "`" + `\\-]`)
+	extRe       = regexp.MustCompile(`\.[^./\s]+$`)
+	trailRe     = regexp.MustCompile(`[/*@]+$`)
+)
+
+func stripInlineComment(line string) string {
+	return commentRe.ReplaceAllString(line, "")
+}
+
+func countDepth(line string) int {
+	prefix := leadingRe.FindString(line)
+	normalized := strings.ReplaceAll(prefix, "\t", "    ")
+	normalized = treeCharsRe.ReplaceAllString(normalized, " ")
+	return len([]rune(normalized)) / 4
+}
+
+func parseLine(rawLine string) *parsedNode {
+	withoutComment := stripInlineComment(rawLine)
+	if strings.TrimSpace(withoutComment) == "" {
+		return nil
+	}
+
+	depth := countDepth(withoutComment)
+	trimmed := strings.TrimSpace(withoutComment)
+	entryWithMarkers := strings.TrimSpace(treeStripRe.ReplaceAllString(trimmed, ""))
+	if entryWithMarkers == "" {
+		return nil
+	}
+
+	explicitDirectory := strings.HasSuffix(entryWithMarkers, "/")
+	explicitSymlink := strings.HasSuffix(entryWithMarkers, "@")
+	executable := strings.HasSuffix(entryWithMarkers, "*")
+	explicitFile := explicitSymlink || executable || extRe.MatchString(entryWithMarkers)
+
+	name := strings.TrimSpace(trailRe.ReplaceAllString(entryWithMarkers, ""))
+	if name == "" || name == "." || name == ".." {
+		return nil
+	}
+
+	return &parsedNode{
+		Depth:             depth,
+		Name:              name,
+		ExplicitDirectory: explicitDirectory,
+		ExplicitFile:      explicitFile,
+		ExplicitSymlink:   explicitSymlink,
+		Executable:        executable,
+	}
+}
+
+func decideNodeKinds(nodes []parsedNode) []parsedNode {
+	result := make([]parsedNode, len(nodes))
+	for i, node := range nodes {
+		nextDeeper := i+1 < len(nodes) && nodes[i+1].Depth > node.Depth
+		node.IsDirectory = node.ExplicitDirectory || (!node.ExplicitFile && nextDeeper)
+		result[i] = node
+	}
+	return result
+}
+
+func createFromTree(lines []string, root string) createResult {
+	parsed := make([]parsedNode, 0, len(lines))
+	for _, line := range lines {
+		node := parseLine(line)
+		if node != nil {
+			parsed = append(parsed, *node)
 		}
 	}
-	return count
-}
 
-func stripTreeGlyphs(line string) string {
-	return strings.TrimSpace(strings.Map(func(r rune) rune {
-		if strings.ContainsRune("│├└─", r) {
-			return -1
-		}
-		return r
-	}, line))
-}
+	nodes := decideNodeKinds(parsed)
+	result := createResult{}
 
-func createFromTree(lines []string, root string) error {
-	stack := []DirEntry{{Path: root, Indent: -1}}
+	stackPaths := []string{root}
+	stackDepths := []int{-1}
 
-	for _, line := range lines {
-		line = strings.Split(line, "#")[0] // Strip comments
-		line = strings.TrimRight(line, " ")
-		if line == "" {
-			continue
-		}
-
-		indent := calculateIndent(line)
-		name := stripTreeGlyphs(line)
-		isDir := strings.HasSuffix(name, "/")
-		name = strings.TrimSuffix(name, "/")
-		name = strings.TrimSuffix(name, "*")
-
-		// Pop stack to correct parent level
-		for len(stack) > 0 && stack[len(stack)-1].Indent >= indent {
-			stack = stack[:len(stack)-1]
+	for _, node := range nodes {
+		for len(stackDepths) > 0 && stackDepths[len(stackDepths)-1] >= node.Depth {
+			stackDepths = stackDepths[:len(stackDepths)-1]
+			stackPaths = stackPaths[:len(stackPaths)-1]
 		}
 
 		parent := root
-		if len(stack) > 0 {
-			parent = stack[len(stack)-1].Path
+		if len(stackPaths) > 0 {
+			parent = stackPaths[len(stackPaths)-1]
 		}
-		path := filepath.Join(parent, name)
+		target := filepath.Join(parent, node.Name)
 
-		if isDir {
-			err := os.MkdirAll(path, 0755)
-			if err != nil {
-				return fmt.Errorf("failed to create directory %q: %w", path, err)
+		if node.IsDirectory {
+			if err := os.MkdirAll(target, 0o755); err != nil {
+				result.Errors = append(result.Errors, fmt.Sprintf("%s: %v", target, err))
+				continue
 			}
-			stack = append(stack, DirEntry{Path: path, Indent: indent})
-		} else {
-			file, err := os.Create(path)
-			if err != nil {
-				return fmt.Errorf("failed to create file %q: %w", path, err)
-			}
-			file.Close()
+			result.CreatedDirs++
+			stackPaths = append(stackPaths, target)
+			stackDepths = append(stackDepths, node.Depth)
+			continue
 		}
+
+		if err := os.MkdirAll(parent, 0o755); err != nil {
+			result.Errors = append(result.Errors, fmt.Sprintf("%s: %v", target, err))
+			continue
+		}
+		file, err := os.OpenFile(target, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o644)
+		if err != nil {
+			result.Errors = append(result.Errors, fmt.Sprintf("%s: %v", target, err))
+			continue
+		}
+		_ = file.Close()
+
+		if node.Executable && runtime.GOOS != "windows" {
+			if chmodErr := os.Chmod(target, 0o744); chmodErr != nil {
+				result.Errors = append(result.Errors, fmt.Sprintf("%s: %v", target, chmodErr))
+			}
+		}
+
+		result.CreatedFiles++
 	}
-	return nil
+
+	return result
 }
 
 func main() {
+	root := "."
+	if len(os.Args) > 1 && strings.TrimSpace(os.Args[1]) != "" {
+		root = os.Args[1]
+	}
+
 	scanner := bufio.NewScanner(os.Stdin)
 	var lines []string
 	for scanner.Scan() {
 		lines = append(lines, scanner.Text())
 	}
-
 	if err := scanner.Err(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error reading input: %v\n", err)
 		os.Exit(1)
 	}
 
-	if err := createFromTree(lines, "."); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+	result := createFromTree(lines, root)
+	if len(result.Errors) > 0 {
+		fmt.Fprintf(
+			os.Stderr,
+			"retree: created %d dirs and %d files with %d errors\nfirst error: %s\n",
+			result.CreatedDirs,
+			result.CreatedFiles,
+			len(result.Errors),
+			result.Errors[0],
+		)
 		os.Exit(1)
 	}
 }
