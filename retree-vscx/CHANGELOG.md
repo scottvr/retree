@@ -12,6 +12,6 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 make vsix compileable
 
-## v0.1.1
+## v1.2.1
 
 publish package to marketplace

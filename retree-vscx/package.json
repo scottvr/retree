@@ -1,8 +1,8 @@
 {
   "name": "retree",
   "displayName": "retree",
-  "description": "Inverse tree(1): create directories and files from tree -F style text selected in the editor.",
-  "version": "0.1.2",
+  "description": "An inverse tree(1): create directories and files from tree -F style text selected in the editor.",
+  "version": "1.2.1",
   "publisher": "scottvr",
   "license": "MIT",
   "repository": {
@@ -18,16 +18,15 @@
   },
   "keywords": [
     "tree",
+    "/usr/bin/tree",
     "filesystem",
     "scaffold",
     "directory",
+    "directories",
     "retree"
   ],
   "categories": [
     "Other"
-  ],
-  "activationEvents": [
-    "onCommand:retree.createFromTree"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -35,7 +34,7 @@
       {
         "command": "retree.createFromTree",
         "title": "Create Directories from Tree",
-        "category": "Retree"
+        "category": "File System"
       }
     ]
   },

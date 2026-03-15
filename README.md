@@ -78,13 +78,15 @@ Here's an example of usage within vscode :
 
 ![the last image from a series of five showing usage with the vscode extension](retree-vscx/docs/images/ss-5.png)
 
+### Now uploaded to the vscode marketplace so it can be installed within the IDE without needing this repo
+
+**Fun fact:**: I pushed an update to this repo on Oct 19, 2024 saying the vscode extension v0.0.1 was ["finally working!"](https://github.com/scottvr/retree/commit/8ee650474654d819f35bf9f978e1923c64fcccd7)
+
+Five days later, on Oct 26, 2024,  some guy uploaded a compiled vscode extension named `retree` with the same functionality, also at v0.0.1. I only discovered this today when I tried to upload a packaged version with enhanced functionality and was told by the system  that "a package named retree already exists in the Marketplace." The publisher's page on the Marketplace links to a github repo for retree under his name, but it 404's, so I guess it's private or has been deleted.
+
+The release notes for that package include as the last line, a part of the response from the LLM used to generate it: `Would you like me to modify the release notes further or add any other improvements we made?` :-)
+
+Anyway, I've improved the parsing so that all versions handle the same input text in the same way, with ASCII, Unicode, `tree -F` markers, whitespace/tabs, no line decorators, indention-level look-ahead inference, and more all supported properly. The guy who coincidentally pubblished his modifications over the 0.0.1 version hasn't updated since 11/2020 but even renaming my extension won't allow me to upload it to the Marketplace, with the reason given that is is "ssupicious". The support site says they try to stop scams that mislead by  using other paackage names,  but even changing the name of my package does not work, so you may just download it from here, or clone the repo and build it yourself with `npm ci; npm run package`
+
 ### Disclaimer
 This is a utility made from desire and necessity to perform a specific purpose. Utilitarian. I likely would have kept it to myself except that once I spent the time to get it working within vscode, it occurred to me that I *might* not be the only person who has ever wished this to exist, so just in case, I thought I'd put this here for you. 
-
-### the below is not entirely true anymore.  the bash version became entirely ludicrous overkill and has all sorts of whistles and bells, which I should port over to the other implementations soon too.
-
-Point being, it is not whistles and bells, no command-line options or visual elements, etc. and probably never will have those things. (Unless a PR comes in with them showing that a) I am really not alone on this one and b) oh well, I guess again, I'm not alone.) 
-
-If it remains forever minimalist, unseen and unused by anyone else, I am ok with that. I am quite accustomed to creating things for myself that apparently only I have any desire to exist. (See also my art, writing, music, etc.)
-
-By me, for me, but happy to share.  

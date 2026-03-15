@@ -7,7 +7,7 @@ in the repo https://github.com/scottvr/retree
 ## Usage
 
 1. Select tree text in the editor.
-2. Run `Retree: Create Directories from Tree` from the Command Palette.
+2. Run `retree: Create Directories from Tree` from the Command Palette.
 3. Enter a destination root directory, or accept the default workspace path.
 
 ## Example
@@ -17,20 +17,3 @@ in the repo https://github.com/scottvr/retree
 3. Run the command from the Command Palette.
 4. Optionally change the destination root directory.
 5. Files/directories are created under that root.
-
-## Package As VSIX
-
-```bash
-npm ci
-npm run package
-```
-
-This creates `retree-<version>.vsix` in the project root.
-
-## Install Locally
-
-```bash
-code --install-extension retree-0.1.0.vsix
-```
-
-or use VS Code: `Extensions` -> `...` -> `Install from VSIX...`.
