@@ -12,7 +12,7 @@ in the repo https://github.com/scottvr/retree
 
 ## Example
 
-1. Open a document with a tree layout.
+1. Open a document with a `tree -F`-styke layout.
 2. Highlight the tree text.
 3. Run the command from the Command Palette.
 4. Optionally change the destination root directory.
@@ -22,7 +22,6 @@ in the repo https://github.com/scottvr/retree
 
 ```bash
 npm ci
-npm run compile
 npm run package
 ```
 
@@ -35,19 +34,3 @@ code --install-extension retree-0.1.0.vsix
 ```
 
 or use VS Code: `Extensions` -> `...` -> `Install from VSIX...`.
-
-## Publish To Marketplace
-
-1. Create a publisher in Azure DevOps/VS Marketplace.
-2. Set `"publisher"` in `package.json` to that publisher ID.
-3. Authenticate `vsce` with a Personal Access Token:
-
-```bash
-npx vsce login <publisher-id>
-```
-
-4. Publish:
-
-```bash
-npx vsce publish
-```
