@@ -1,57 +1,116 @@
 import os
+import re
+import stat
 import sys
+from typing import List, Dict, Any
 
-def calculate_indent(line):
-    """Determine nesting level by counting tree characters."""
-    return line.count('│') + line.count('├') + line.count('└')
+COMMENT_RE = re.compile(r"\s+(?:#|;|//|/\*).*$")
+LEADING_RE = re.compile(r"^[\s│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+`\\-]*")
+TREE_STRIP_RE = re.compile(r"^[\s│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+`\\-]+")
+TREE_CHARS_RE = re.compile(r"[│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+`\\-]")
 
 
-def create_from_tree(tree, root_dir="."):
-    #lines = [line for line in tree.splitlines() if line.strip() != '']
-    lines = [line.split('#')[0].rstrip() for line in tree.splitlines() if line.split('#')[0].strip() != '']
+def strip_inline_comment(line: str) -> str:
+    return COMMENT_RE.sub("", line)
 
-    current_path = root_dir
-    dir_stack = [{"path": current_path, "indent": -1}]
 
-    for line in lines:
-        current_indent = calculate_indent(line)  # Calculate indent based on tree characters
-        cleaned_line = ''.join(char for char in line if char not in '│├└─').strip()  # Clean up tree symbols
+def count_depth(line: str) -> int:
+    prefix = LEADING_RE.match(line).group(0)
+    normalized = prefix.replace("\t", "    ")
+    normalized = TREE_CHARS_RE.sub(" ", normalized)
+    return len(normalized) // 4
 
-        #print(f'Processing line: "{line}" (cleaned: "{cleaned_line}", indent: {current_indent})')
 
-        # Determine if this is a directory or a file
-        is_directory = cleaned_line.endswith('/') # or '.' not in cleaned_line
+def parse_line(raw_line: str) -> Dict[str, Any] | None:
+    without_comment = strip_inline_comment(raw_line)
+    if not without_comment.strip():
+        return None
 
-        while dir_stack and dir_stack[-1]["indent"] >= current_indent:
-            dir_stack.pop()
-            # After popping, update current_path based on the new top of the stack
-            current_path = dir_stack[-1]["path"] if dir_stack else root_dir
+    depth = count_depth(without_comment)
+    trimmed = without_comment.strip()
+    entry_with_markers = TREE_STRIP_RE.sub("", trimmed).strip()
+    if not entry_with_markers:
+        return None
 
-        # If the stack is not empty, update current_path to the last valid directory
-        if dir_stack:
-            current_path = dir_stack[-1]["path"]
+    explicit_directory = entry_with_markers.endswith("/")
+    explicit_symlink = entry_with_markers.endswith("@")
+    explicit_file = explicit_symlink or entry_with_markers.endswith("*") or bool(re.search(r"\.[^./\s]+$", entry_with_markers))
+    executable = entry_with_markers.endswith("*")
 
-        if is_directory:
-            # Create the new directory
-            new_dir_path = os.path.join(current_path, cleaned_line.rstrip('/'))  # Remove trailing slash
-            os.makedirs(new_dir_path, exist_ok=True)
-            #print(f'Created directory: {new_dir_path}')
+    name = re.sub(r"[/*@]+$", "", entry_with_markers).strip()
+    if not name or name in {".", ".."}:
+        return None
 
-            # Push the new directory onto the stack with its indent level
-            dir_stack.append({"path": new_dir_path, "indent": current_indent})
-            #print(f'Pushed to stack: {dir_stack}')
+    return {
+        "depth": depth,
+        "name": name,
+        "explicit_directory": explicit_directory,
+        "explicit_file": explicit_file,
+        "explicit_symlink": explicit_symlink,
+        "executable": executable,
+    }
 
-            # Update currentPath to this new directory
-            current_path = new_dir_path
-        else:
-            # Create the file in the current directory
-            file_path = os.path.join(current_path, cleaned_line.rstrip('*'))  # Join with the current directory
-            with open(file_path, 'w') as f:
-                pass  # Create an empty file
-            #print(f'Created file: {file_path}')
+
+def decide_node_kinds(nodes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    result: List[Dict[str, Any]] = []
+    for i, node in enumerate(nodes):
+        next_node = nodes[i + 1] if i + 1 < len(nodes) else None
+        inferred_directory = bool(next_node and next_node["depth"] > node["depth"])
+        is_directory = node["explicit_directory"] or (not node["explicit_file"] and inferred_directory)
+        item = dict(node)
+        item["is_directory"] = is_directory
+        result.append(item)
+    return result
+
+
+def create_from_tree(tree: str, root_dir: str = ".") -> Dict[str, Any]:
+    parsed_nodes = [node for node in (parse_line(line) for line in tree.splitlines()) if node is not None]
+    nodes = decide_node_kinds(parsed_nodes)
+
+    created_dirs = 0
+    created_files = 0
+    errors: List[str] = []
+
+    stack = [{"path": root_dir, "depth": -1}]
+
+    for node in nodes:
+        while stack and stack[-1]["depth"] >= node["depth"]:
+            stack.pop()
+
+        parent_path = stack[-1]["path"] if stack else root_dir
+        target_path = os.path.join(parent_path, node["name"])
+
+        try:
+            if node["is_directory"]:
+                os.makedirs(target_path, exist_ok=True)
+                created_dirs += 1
+                stack.append({"path": target_path, "depth": node["depth"]})
+            elif node["explicit_symlink"]:
+                os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                with open(target_path, "w", encoding="utf-8"):
+                    pass
+                created_files += 1
+            else:
+                os.makedirs(os.path.dirname(target_path), exist_ok=True)
+                with open(target_path, "w", encoding="utf-8"):
+                    pass
+                if node["executable"]:
+                    mode = os.stat(target_path).st_mode
+                    os.chmod(target_path, mode | stat.S_IXUSR)
+                created_files += 1
+        except OSError as error:
+            errors.append(f"{target_path}: {error}")
+
+    return {"created_dirs": created_dirs, "created_files": created_files, "errors": errors}
+
 
 if __name__ == "__main__":
-    # Read from stdin and call the function
     input_tree = sys.stdin.read()
-    create_from_tree(input_tree)
-
+    result = create_from_tree(input_tree)
+    if result["errors"]:
+        print(
+            f"retree: created {result['created_dirs']} dirs and {result['created_files']} files with {len(result['errors'])} errors",
+            file=sys.stderr,
+        )
+        print(result["errors"][0], file=sys.stderr)
+        sys.exit(1)
