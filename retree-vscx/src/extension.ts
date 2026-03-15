@@ -2,80 +2,145 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 
-export function createFromTree(tree: string, rootDir: string = ".") {
-    const lines = tree.split('\n').filter(line => line.trim() !== '');
-    console.log(process.cwd()); 
-    let currentPath = rootDir;
-    let dirStack = [{ path: currentPath, indent: -1 }];
-    
-    // Helper function to calculate indentation based on replaced tree characters
-    function calculateIndent(line: string): number {
-        // Match both tree symbols and leading whitespace
-        const match = line.match(/^[│├└─\s]+/g);
-        const charCount = match ? match[0].length : 0;
-    
-        // Divide by 2, assuming two characters represent one indentation level
-        return Math.floor(charCount / 2);
+type ParsedNode = {
+    depth: number;
+    name: string;
+    explicitDirectory: boolean;
+    explicitFile: boolean;
+};
+
+type CreateResult = {
+    createdDirs: number;
+    createdFiles: number;
+    errors: string[];
+};
+
+function stripInlineComment(line: string): string {
+    // Heuristic: treat comment markers as comments only when preceded by whitespace.
+    return line.replace(/\s+(?:#|;|\/\/|\/\*).*$/, '');
+}
+
+function countDepth(line: string): number {
+    const indentPrefix = (line.match(/^[\s│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+`\\-]*/) || [''])[0];
+    const normalized = indentPrefix
+        .replace(/\t/g, '    ')
+        .replace(/[│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+`\\-]/g, ' ');
+    return Math.floor(normalized.length / 4);
+}
+
+function parseLine(rawLine: string): ParsedNode | null {
+    const withoutComment = stripInlineComment(rawLine);
+    if (!withoutComment.trim()) {
+        return null;
     }
 
-    lines.forEach((line, i) => {
-        const currentIndent = calculateIndent(line);  // New function to calculate indent based on tree characters
-        const cleanedLine = line.trim().replace(/[│├└─]+/g, '').trim();  // Clean up tree symbols
-    
-        console.log(`Processing line: "${line}" (cleaned: "${cleanedLine}", indent: ${currentIndent})`);
-    
-        // Determine if this is a directory or a file
-        const isDirectory = cleanedLine.endsWith('/') || !cleanedLine.includes('.');
-    
-        while (dirStack.length > 0 && dirStack[dirStack.length - 1].indent >= currentIndent) {
-            dirStack.pop();
-            // After popping, update currentPath based on the new top of the stack
-            currentPath = dirStack.length > 0 ? dirStack[dirStack.length - 1].path : rootDir;
-        }
+    const depth = countDepth(withoutComment);
+    const trimmed = withoutComment.trim();
 
-        // If the stack is not empty, update currentPath to the last valid directory
-        if (dirStack.length > 0) {
-            currentPath = dirStack[dirStack.length - 1].path;
-        }
-    
-        if (isDirectory) {
-            // Create the new directory
-            const newDirPath = path.join(currentPath, cleanedLine.replace(/\/$/, ''));  // Remove trailing slash
-            fs.mkdirSync(newDirPath, { recursive: true });
-            console.log(`Created directory: ${newDirPath}`);
-    
-            // Push the new directory onto the stack with its indent level
-            dirStack.push({ path: newDirPath, indent: currentIndent });
-            console.log(`Pushed to stack:`, dirStack);
-    
-            // Update currentPath to this new directory
-            currentPath = newDirPath;
-        } else {
-            // Create the file in the current directory
-            const filePath = path.join(currentPath, cleanedLine);  // Join with the current directory
-            fs.writeFileSync(filePath, '');
-            console.log(`Created file: ${filePath}`);
-        }
+    const entryWithMarkers = trimmed.replace(/^[│├└┌┐┬┴┼╭╮╯╰─━═║╠╚╔╩╦╬|+`\\\-\s]+/, '').trim();
+    if (!entryWithMarkers) {
+        return null;
+    }
+
+    const explicitDirectory = entryWithMarkers.endsWith('/');
+    const explicitFile = entryWithMarkers.endsWith('*') || /\.[^./\s]+$/.test(entryWithMarkers);
+
+    const name = entryWithMarkers.replace(/[/*]+$/, '').trim();
+    if (!name || name === '.' || name === '..') {
+        return null;
+    }
+
+    return {
+        depth,
+        name,
+        explicitDirectory,
+        explicitFile,
+    };
+}
+
+function decideNodeKinds(nodes: ParsedNode[]): Array<ParsedNode & { isDirectory: boolean }> {
+    return nodes.map((node, i) => {
+        const next = nodes[i + 1];
+        const inferredDirectory = Boolean(next && next.depth > node.depth);
+        const isDirectory = node.explicitDirectory || (!node.explicitFile && inferredDirectory);
+        return { ...node, isDirectory };
     });
 }
 
-// Command implementation for the VS Code extension
-export function activate(context: vscode.ExtensionContext) {
-    const disposable = vscode.commands.registerCommand('retree.createFromTree', () => {
-        const editor = vscode.window.activeTextEditor;
+export function createFromTree(tree: string, rootDir: string = '.'): CreateResult {
+    const parsed = tree
+        .split('\n')
+        .map(parseLine)
+        .filter((node): node is ParsedNode => node !== null);
 
-        if (editor) {
-            const selection = editor.selection;
-            const selectedText = editor.document.getText(selection);
+    const nodes = decideNodeKinds(parsed);
+    const errors: string[] = [];
+    let createdDirs = 0;
+    let createdFiles = 0;
 
-            // Prompt user for the root directory, defaulting to current workspace folder
-            vscode.window.showInputBox({ prompt: 'Enter the root directory for the tree (default: current directory)', value: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || '.' })
-                .then(rootDir => {
-                    rootDir = rootDir || '.'; // Use current directory if none is specified
-                    createFromTree(selectedText, rootDir);
-                    vscode.window.showInformationMessage('Directory tree created successfully!');
-                });
+    const stack = [{ path: rootDir, depth: -1 }];
+
+    for (const node of nodes) {
+        while (stack.length > 0 && stack[stack.length - 1].depth >= node.depth) {
+            stack.pop();
         }
+
+        const parentPath = stack.length > 0 ? stack[stack.length - 1].path : rootDir;
+        const targetPath = path.join(parentPath, node.name);
+
+        try {
+            if (node.isDirectory) {
+                fs.mkdirSync(targetPath, { recursive: true });
+                createdDirs += 1;
+                stack.push({ path: targetPath, depth: node.depth });
+            } else {
+                fs.mkdirSync(parentPath, { recursive: true });
+                fs.writeFileSync(targetPath, '', { flag: 'w' });
+                createdFiles += 1;
+            }
+        } catch (error) {
+            const message = error instanceof Error ? error.message : String(error);
+            errors.push(`${targetPath}: ${message}`);
+        }
+    }
+
+    return { createdDirs, createdFiles, errors };
+}
+
+export function activate(context: vscode.ExtensionContext) {
+    const disposable = vscode.commands.registerCommand('retree.createFromTree', async () => {
+        const editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            vscode.window.showWarningMessage('No active editor found.');
+            return;
+        }
+
+        const selection = editor.selection;
+        const selectedText = editor.document.getText(selection);
+        if (!selectedText.trim()) {
+            vscode.window.showWarningMessage('Select tree text first, then run Retree.');
+            return;
+        }
+
+        const rootDirInput = await vscode.window.showInputBox({
+            prompt: 'Enter the root directory for the tree (default: current workspace folder)',
+            value: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath || '.',
+        });
+
+        const rootDir = (rootDirInput || '.').trim() || '.';
+        const result = createFromTree(selectedText, rootDir);
+
+        if (result.errors.length > 0) {
+            const firstError = result.errors[0];
+            vscode.window.showWarningMessage(
+                `Retree created ${result.createdDirs} dirs and ${result.createdFiles} files with ${result.errors.length} errors. First: ${firstError}`
+            );
+            return;
+        }
+
+        vscode.window.showInformationMessage(
+            `Retree created ${result.createdDirs} directories and ${result.createdFiles} files.`
+        );
     });
 
     context.subscriptions.push(disposable);
