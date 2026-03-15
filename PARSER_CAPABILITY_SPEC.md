@@ -1,37 +1,5 @@
 # Retree Parser Capability Matrix and Canonical Spec
 
-## Goal
-Unify parser behavior across all four implementations:
-- `retree-bash/retree.sh`
-- `retree-python/retree.py`
-- `retree-go/main.go`
-- `retree-vscx/src/extension.ts`
-
-## Baseline Drift Snapshot (Before Alignment)
-Legend: `Y` = supported, `P` = partial/inconsistent, `N` = not supported.
-
-| Capability | Bash | Python | Go | VS Code TS |
-|---|---:|---:|---:|---:|
-| Unicode `tree -F` line-art (`│ ├ └ ─`) | Y | Y | Y | Y |
-| Indent-only hierarchy (no line-art) | N | N | N | Y |
-| ASCII line-art (`|`, `+`, `-`, `\\`) | P | N | N | P |
-| Inline `#` comments | Y | Y | Y | Y |
-| Inline `//` comments | N | N | N | Y |
-| Inline `/*` comments | N | N | N | Y |
-| Inline `;` comments | N | N | N | Y |
-| Tabs in indentation | P | P | P | Y |
-| Explicit directory marker `/` | Y | Y | Y | Y |
-| Executable marker `*` parsing | Y | Y | Y | Y |
-| Executable bit (`chmod +x`) | Y | N | N | N |
-| Symlink marker `@` parsing | Y | N | N | N |
-| Symlink creation behavior | P (placeholder file) | N | N | N |
-| Directory inference by lookahead depth | N | N | N | Y |
-| Per-entry error collection (continue on error) | P | N | N | Y |
-| Root path override parameter | Y | Y | N (fixed `.`) | Y |
-| DOS/Windows `tree` format intent | P (input format flag exists, converter stub) | N | N | N |
-
-## Canonical Superset Spec (Target)
-
 ### 1. Input Forms
 Parser accepts:
 1. Unicode tree line-art (`tree -F` style).
@@ -101,7 +69,7 @@ Verification notes:
 3. Full DOS `tree` parser with every switch variant.
 4. CP437 byte-level decoding guarantees across all locales.
 
-## Glaring Omissions To Consider Next
+## TODO:
 1. Optional strict mode to reject ambiguous entries instead of inferring.
 2. Path traversal guardrails (`..`, absolute paths) for safer default behavior.
 3. Conflict policy: skip/overwrite/prompt on existing files.
