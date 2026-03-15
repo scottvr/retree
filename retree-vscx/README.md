@@ -7,7 +7,7 @@ in the repo https://github.com/scottvr/retree
 ## Usage
 
 1. Select tree text in the editor.
-2. Run `retree: Create Directories from Tree` from the Command Palette.
+2. Run `Retree: Create Directories from Tree` from the Command Palette.
 3. Enter a destination root directory, or accept the default workspace path.
 
 ## Example
