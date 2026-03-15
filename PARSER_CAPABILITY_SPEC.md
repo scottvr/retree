@@ -58,8 +58,10 @@ Per parsed node:
 1. `name/` => directory (explicit).
 2. `name@` => symlink placeholder entry (explicit).
 3. `name*` => file (explicit executable marker).
-4. `name.ext` => file (explicit file heuristic).
-5. Otherwise infer by lookahead: if next node is deeper, treat as directory; else file.
+4. If next node is deeper, treat as directory (structural inference).
+5. `name.ext` is not automatically treated as file when marker-style input is detected.
+6. Marker-style input detection: if any explicit file marker (`*` or `@`) appears in the input, undecorated dotted leaves are treated as directories unless structural depth proves otherwise.
+7. Otherwise (non-marker-style input), undecorated dotted leaves default to file.
 
 ### 6. Creation Semantics
 - Use stack-by-depth to resolve parent path.
@@ -104,3 +106,4 @@ Verification notes:
 2. Path traversal guardrails (`..`, absolute paths) for safer default behavior.
 3. Conflict policy: skip/overwrite/prompt on existing files.
 4. Shared cross-language golden test fixtures to prevent drift.
+5. Optional explicit mode switch (strict marker-style vs permissive extension heuristic).

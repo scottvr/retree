@@ -17,6 +17,7 @@ type parsedNode struct {
 	ExplicitFile      bool
 	ExplicitSymlink   bool
 	Executable        bool
+	HasDotExtension   bool
 	IsDirectory       bool
 }
 
@@ -62,7 +63,8 @@ func parseLine(rawLine string) *parsedNode {
 	explicitDirectory := strings.HasSuffix(entryWithMarkers, "/")
 	explicitSymlink := strings.HasSuffix(entryWithMarkers, "@")
 	executable := strings.HasSuffix(entryWithMarkers, "*")
-	explicitFile := explicitSymlink || executable || extRe.MatchString(entryWithMarkers)
+	hasDotExtension := extRe.MatchString(entryWithMarkers)
+	explicitFile := explicitSymlink || executable
 
 	name := strings.TrimSpace(trailRe.ReplaceAllString(entryWithMarkers, ""))
 	if name == "" || name == "." || name == ".." {
@@ -76,14 +78,25 @@ func parseLine(rawLine string) *parsedNode {
 		ExplicitFile:      explicitFile,
 		ExplicitSymlink:   explicitSymlink,
 		Executable:        executable,
+		HasDotExtension:   hasDotExtension,
 	}
 }
 
 func decideNodeKinds(nodes []parsedNode) []parsedNode {
+	markerStyle := false
+	for _, node := range nodes {
+		if node.ExplicitFile {
+			markerStyle = true
+			break
+		}
+	}
+
 	result := make([]parsedNode, len(nodes))
 	for i, node := range nodes {
 		nextDeeper := i+1 < len(nodes) && nodes[i+1].Depth > node.Depth
-		node.IsDirectory = node.ExplicitDirectory || (!node.ExplicitFile && nextDeeper)
+		dottedButUnmarked := node.HasDotExtension && !node.ExplicitFile
+		treatUnmarkedDottedAsDir := markerStyle && dottedButUnmarked && !nextDeeper
+		node.IsDirectory = node.ExplicitDirectory || nextDeeper || treatUnmarkedDottedAsDir
 		result[i] = node
 	}
 	return result

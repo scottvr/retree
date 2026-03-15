@@ -34,8 +34,9 @@ def parse_line(raw_line: str) -> Dict[str, Any] | None:
 
     explicit_directory = entry_with_markers.endswith("/")
     explicit_symlink = entry_with_markers.endswith("@")
-    explicit_file = explicit_symlink or entry_with_markers.endswith("*") or bool(re.search(r"\.[^./\s]+$", entry_with_markers))
     executable = entry_with_markers.endswith("*")
+    has_dot_extension = bool(re.search(r"\.[^./\s]+$", entry_with_markers))
+    explicit_file = explicit_symlink or executable
 
     name = re.sub(r"[/*@]+$", "", entry_with_markers).strip()
     if not name or name in {".", ".."}:
@@ -48,15 +49,24 @@ def parse_line(raw_line: str) -> Dict[str, Any] | None:
         "explicit_file": explicit_file,
         "explicit_symlink": explicit_symlink,
         "executable": executable,
+        "has_dot_extension": has_dot_extension,
     }
 
 
 def decide_node_kinds(nodes: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    marker_style = any(node["explicit_file"] for node in nodes)
+
     result: List[Dict[str, Any]] = []
     for i, node in enumerate(nodes):
         next_node = nodes[i + 1] if i + 1 < len(nodes) else None
         inferred_directory = bool(next_node and next_node["depth"] > node["depth"])
-        is_directory = node["explicit_directory"] or (not node["explicit_file"] and inferred_directory)
+        dotted_but_unmarked = node["has_dot_extension"] and not node["explicit_file"]
+        treat_unmarked_dotted_as_dir = marker_style and dotted_but_unmarked and not inferred_directory
+        is_directory = (
+            node["explicit_directory"] or
+            inferred_directory or
+            treat_unmarked_dotted_as_dir
+        )
         item = dict(node)
         item["is_directory"] = is_directory
         result.append(item)

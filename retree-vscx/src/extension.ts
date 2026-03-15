@@ -9,6 +9,7 @@ type ParsedNode = {
     explicitFile: boolean;
     explicitSymlink: boolean;
     executable: boolean;
+    hasDotExtension: boolean;
 };
 
 type CreateResult = {
@@ -47,7 +48,8 @@ function parseLine(rawLine: string): ParsedNode | null {
     const explicitDirectory = entryWithMarkers.endsWith('/');
     const explicitSymlink = entryWithMarkers.endsWith('@');
     const executable = entryWithMarkers.endsWith('*');
-    const explicitFile = explicitSymlink || executable || /\.[^./\s]+$/.test(entryWithMarkers);
+    const hasDotExtension = /\.[^./\s]+$/.test(entryWithMarkers);
+    const explicitFile = explicitSymlink || executable;
 
     const name = entryWithMarkers.replace(/[/*@]+$/, '').trim();
     if (!name || name === '.' || name === '..') {
@@ -61,14 +63,19 @@ function parseLine(rawLine: string): ParsedNode | null {
         explicitFile,
         explicitSymlink,
         executable,
+        hasDotExtension,
     };
 }
 
 function decideNodeKinds(nodes: ParsedNode[]): Array<ParsedNode & { isDirectory: boolean }> {
+    const markerStyle = nodes.some((node) => node.explicitFile);
+
     return nodes.map((node, i) => {
         const next = nodes[i + 1];
         const inferredDirectory = Boolean(next && next.depth > node.depth);
-        const isDirectory = node.explicitDirectory || (!node.explicitFile && inferredDirectory);
+        const dottedButUnmarked = node.hasDotExtension && !node.explicitFile;
+        const treatUnmarkedDottedAsDir = markerStyle && dottedButUnmarked && !inferredDirectory;
+        const isDirectory = node.explicitDirectory || inferredDirectory || treatUnmarkedDottedAsDir;
         return { ...node, isDirectory };
     });
 }

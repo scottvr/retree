@@ -73,10 +73,11 @@ extract_entry() {
 create_from_tree() {
     local root_dir="$START_DIR"
     local line cleaned depth entry name
-    local explicit_dir explicit_symlink explicit_file executable inferred_dir is_dir
+    local explicit_dir explicit_symlink explicit_file executable has_dot_extension inferred_dir is_dir
+    local dotted_but_unmarked treat_unmarked_dotted_as_dir marker_style
     local i last_idx parent target
 
-    local -a names depths explicit_dirs explicit_files explicit_symlinks executables
+    local -a names depths explicit_dirs explicit_files explicit_symlinks executables has_dot_extensions
     local -a lines
     local -a stack_paths stack_depths
     local -a errors
@@ -104,12 +105,13 @@ create_from_tree() {
         explicit_symlink=0
         explicit_file=0
         executable=0
+        has_dot_extension=0
 
         [[ "$entry" == */ ]] && explicit_dir=1
         [[ "$entry" == *@ ]] && explicit_symlink=1
         [[ "$entry" == *\* ]] && executable=1
-
-        if [[ $explicit_symlink -eq 1 || $executable -eq 1 || "$entry" =~ \.[^./[:space:]]+$ ]]; then
+        [[ "$entry" =~ \.[^./[:space:]]+$ ]] && has_dot_extension=1
+        if [[ $explicit_symlink -eq 1 || $executable -eq 1 ]]; then
             explicit_file=1
         fi
 
@@ -126,6 +128,15 @@ create_from_tree() {
         explicit_files+=("$explicit_file")
         explicit_symlinks+=("$explicit_symlink")
         executables+=("$executable")
+        has_dot_extensions+=("$has_dot_extension")
+    done
+
+    marker_style=0
+    for ((i = 0; i < ${#names[@]}; i++)); do
+        if (( explicit_files[i] == 1 )); then
+            marker_style=1
+            break
+        fi
     done
 
     stack_paths=("$root_dir")
@@ -137,8 +148,17 @@ create_from_tree() {
             inferred_dir=1
         fi
 
+        dotted_but_unmarked=0
+        if (( has_dot_extensions[i] == 1 && explicit_files[i] == 0 )); then
+            dotted_but_unmarked=1
+        fi
+        treat_unmarked_dotted_as_dir=0
+        if (( marker_style == 1 && dotted_but_unmarked == 1 && inferred_dir == 0 )); then
+            treat_unmarked_dotted_as_dir=1
+        fi
+
         is_dir=0
-        if (( explicit_dirs[i] == 1 )) || (( explicit_files[i] == 0 && inferred_dir == 1 )); then
+        if (( explicit_dirs[i] == 1 )) || (( inferred_dir == 1 )) || (( treat_unmarked_dotted_as_dir == 1 )); then
             is_dir=1
         fi
 
