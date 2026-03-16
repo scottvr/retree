@@ -90,7 +90,7 @@ Here's an example of usage within vscode :
 **Fun fact:**:  
 I pushed an update to this repo on Oct 19, 2024 saying the vscode extension v0.0.1 was ["finally working!"](https://github.com/scottvr/retree/commit/8ee650474654d819f35bf9f978e1923c64fcccd7)
 
-Five days later, on Oct 26, 2024,  some guy *coincidentally* happened to uploaded a packaged vscode extension named `retree` (but with his name attached as the author) with the same functionality, and also coincidentally at v0.0.1. 
+Five days later, on Oct 26, 2024,  some guy *coincidentally* happened to upload a packaged vscode extension named `retree` (but with his name attached as the author) with the same functionality, and also coincidentally at v0.0.1. 
 
 I only discovered this when I tried to upload a finally-packaged version with improved functionality, and was told by the system  that "a package named retree already exists in the Marketplace." The publisher's page on the Marketplace links to a github repo for retree under his name, but it 404's, so I guess it's private or has been deleted.
 
