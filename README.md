@@ -11,9 +11,12 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 
 ## What? 
 
-### New! Go version under `retree-go/`
+**A pure bash script developed after I nerd-sniped myself into  answering a decade+ old question about how to accomplish this in bash.**
 
-## A pure bash script developed after I nerd-sniped myself into  answering a decade+ old question about how to accomplish this in bash.
+All versions of retree, in each  of the four language varients in this repo, imolement the same input parsing algorithm, so reliably will function similarly on any input text in `tree -F`, `tree`, `tree.exe`, or plain text data in sinilar-ish structure, comprised of ASCII, Unicode, ANSI-colored varients of either, and handles spaces/tabs indentation or complete lack of "line art" indicators, as well as most any style of comment text comingled in woth the directory tree structure. 
+
+### But, really: WHY?
+
 [My answer on stackoverflow](https://stackoverflow.com/a/79106673/27893564) showed the usage from the python script I had made, but after I posted the answer, it bothered me that the question was asked as a bash question and my answer required python. So...
 
 ```bash
@@ -40,7 +43,7 @@ $ tree -F
         ├──     bleh.py*
         └──     somedir
 ```
-So now it honestly answers how to wccomplish it using bash, with no external requirements.
+So now it honestly answers how to accomplish it using bash, with no external requirements.
 
 ### Also included is a Python tool that takes stdin and does the needful. for example 
 ```bash
@@ -71,7 +74,10 @@ $ tree -F
 6 directories, 5 files
 ```
 
-### Also in the repo is a vacode extension for the same, that does it in natuve typescript, without requiring the bash, python, or go versions of retree
+### Also in the repo is a vscode extension
+
+The `retree-vscx` version does the same thing, but in natuve typescript, without requiring the bash, python, or go versions of `retree`
+
 see the retree-vscx/ subdirectory. It has yet to be packaged so if you want to run it, open extension.ts within vscode and press F5. I'll get around to bundling it up eventually.
 
 Here's an example of usage within vscode :
@@ -86,6 +92,10 @@ Five days later, on Oct 26, 2024,  some guy uploaded a compiled vscode extension
 The release notes for that package include as the last line, a part of the response from the LLM used to generate it: `Would you like me to modify the release notes further or add any other improvements we made?` :-)
 
 Anyway, I've improved the parsing so that all versions handle the same input text in the same way, with ASCII, Unicode, `tree -F` markers, whitespace/tabs, no line decorators, indention-level look-ahead inference, and more all supported properly. The guy who coincidentally pubblished his modifications over the 0.0.1 version hasn't updated since 11/2020 but even renaming my extension won't allow me to upload it to the Marketplace, with the reason given that is is "suspicious". The Marketplace support site says they try to stop scams that mislead by  using other paackage names,  but even changing the name of my package does not work, so you may just download it from here, or clone the repo and build it yourself with `npm ci; npm run package`
+
+### golang version
+
+And, just for fun, there is no a version written in Go, whoch compiles to a small, standalone executable. I have successfully built it on Windows, Linux, MacOS.
 
 ## Disclaimer
 This is a utility made from desire and necessity to perform a specific purpose. Utilitarian. I likely would have kept it to myself except that once I spent the time to get it working within vscode, it occurred to me that I *might* not be the only person who has ever wished this to exist, so just in case, I thought I'd put this here for you. 
