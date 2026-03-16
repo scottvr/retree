@@ -13,8 +13,8 @@ Sure, you could manually mkdir and touch files, or you could slowly watch it com
 
 ### New! Go version under `retree-go/`
 
-### Included is a bash version because I nerd-sniped myself after answering a decade+ old question asking how to accomplish this in bash.
-[My answer on stackoverflow](https://stackoverflow.com/a/79106673/27893564) showed the usage from the python script below, but after I posted the answer, it bothered me that the question was asked as a bash question and my answer required python. So...
+## A pure bash script developed after I nerd-sniped myself into  answering a decade+ old question about how to accomplish this in bash.
+[My answer on stackoverflow](https://stackoverflow.com/a/79106673/27893564) showed the usage from the python script I had made, but after I posted the answer, it bothered me that the question was asked as a bash question and my answer required python. So...
 
 ```bash
 $ git clone https://github.com/scottvr/retree/
@@ -40,9 +40,9 @@ $ tree -F
         ├──     bleh.py*
         └──     somedir
 ```
+So now it honestly answers how to wccomplish it using bash, with no external requirements.
 
-
-### Included is a Python tool that takes stdin and does the needful. for example 
+### Also included is a Python tool that takes stdin and does the needful. for example 
 ```bash
 git clone https://github.com/scottvr/retree/
 cd retree/retree-python
@@ -71,22 +71,21 @@ $ tree -F
 6 directories, 5 files
 ```
 
-### Included also is a vscode extension that takes highlighted tree-format text, and creates a copy of the directory structure represented by it
+### Also in the repo is a vacode extension for the same, that does it in natuve typescript, without requiring the bash, python, or go versions of retree
 see the retree-vscx/ subdirectory. It has yet to be packaged so if you want to run it, open extension.ts within vscode and press F5. I'll get around to bundling it up eventually.
 
 Here's an example of usage within vscode :
 
 ![the last image from a series of five showing usage with the vscode extension](retree-vscx/docs/images/ss-5.png)
 
-### Now uploaded to the vscode marketplace so it can be installed within the IDE without needing this repo
-
-**Fun fact:**: I pushed an update to this repo on Oct 19, 2024 saying the vscode extension v0.0.1 was ["finally working!"](https://github.com/scottvr/retree/commit/8ee650474654d819f35bf9f978e1923c64fcccd7)
+**Fun fact:**:  
+I pushed an update to this repo on Oct 19, 2024 saying the vscode extension v0.0.1 was ["finally working!"](https://github.com/scottvr/retree/commit/8ee650474654d819f35bf9f978e1923c64fcccd7)
 
 Five days later, on Oct 26, 2024,  some guy uploaded a compiled vscode extension named `retree` with the same functionality, also at v0.0.1. I only discovered this today when I tried to upload a packaged version with enhanced functionality and was told by the system  that "a package named retree already exists in the Marketplace." The publisher's page on the Marketplace links to a github repo for retree under his name, but it 404's, so I guess it's private or has been deleted.
 
 The release notes for that package include as the last line, a part of the response from the LLM used to generate it: `Would you like me to modify the release notes further or add any other improvements we made?` :-)
 
-Anyway, I've improved the parsing so that all versions handle the same input text in the same way, with ASCII, Unicode, `tree -F` markers, whitespace/tabs, no line decorators, indention-level look-ahead inference, and more all supported properly. The guy who coincidentally pubblished his modifications over the 0.0.1 version hasn't updated since 11/2020 but even renaming my extension won't allow me to upload it to the Marketplace, with the reason given that is is "ssupicious". The support site says they try to stop scams that mislead by  using other paackage names,  but even changing the name of my package does not work, so you may just download it from here, or clone the repo and build it yourself with `npm ci; npm run package`
+Anyway, I've improved the parsing so that all versions handle the same input text in the same way, with ASCII, Unicode, `tree -F` markers, whitespace/tabs, no line decorators, indention-level look-ahead inference, and more all supported properly. The guy who coincidentally pubblished his modifications over the 0.0.1 version hasn't updated since 11/2020 but even renaming my extension won't allow me to upload it to the Marketplace, with the reason given that is is "suspicious". The Marketplace support site says they try to stop scams that mislead by  using other paackage names,  but even changing the name of my package does not work, so you may just download it from here, or clone the repo and build it yourself with `npm ci; npm run package`
 
-### Disclaimer
+## Disclaimer
 This is a utility made from desire and necessity to perform a specific purpose. Utilitarian. I likely would have kept it to myself except that once I spent the time to get it working within vscode, it occurred to me that I *might* not be the only person who has ever wished this to exist, so just in case, I thought I'd put this here for you. 
