@@ -90,13 +90,15 @@ Here's an example of usage within vscode :
 **Fun fact:**:  
 I pushed an update to this repo on Oct 19, 2024 saying the vscode extension v0.0.1 was ["finally working!"](https://github.com/scottvr/retree/commit/8ee650474654d819f35bf9f978e1923c64fcccd7)
 
-Five days later, on Oct 26, 2024,  some guy uploaded a compiled vscode extension named `retree` with the same functionality, also at v0.0.1. I only discovered this today when I tried to upload a packaged version with enhanced functionality and was told by the system  that "a package named retree already exists in the Marketplace." The publisher's page on the Marketplace links to a github repo for retree under his name, but it 404's, so I guess it's private or has been deleted.
+Five days later, on Oct 26, 2024,  some guy *coincidentally* happened to uploaded a packaged vscode extension named `retree` (but with his name attached as the author) with the same functionality, and also coincidentally at v0.0.1. 
 
-The release notes for that package include as the last line, a part of the response from the LLM used to generate it: `Would you like me to modify the release notes further or add any other improvements we made?` :-)
+I only discovered this when I tried to upload a finally-packaged version with improved functionality, and was told by the system  that "a package named retree already exists in the Marketplace." The publisher's page on the Marketplace links to a github repo for retree under his name, but it 404's, so I guess it's private or has been deleted.
+
+The release notes for that package include as the last line, a part of the response from the LLM that author had apparently been using "coincidentally" to finalize his `retree` vscode extension. It reads: "*Would you like me to modify the release notes further or add any other improvements we made?*" :-)
  
-Anyway, the guy who coincidentally published his modifications over the 0.0.1 version hasn't updated since 11/2024 but even renaming my extension won't allow me to upload it to the Marketplace, with the reason given that is is "suspicious". The Marketplace support site says they try to stop scams that mislead by  using other paackage names,  but even changing the name of my package does not work, so you may just download it from here, or clone the repo and build it yourself with `npm ci; npm run package`
+Anyway, the guy who "coincidentally" published his slightly modified vscode extension hasn't updated since 11/2024 but even renaming my extension won't allow me to upload it to the Marketplace, with the reason given that it is "suspicious". The Marketplace support site says, regarding this message, that they try to stop scams that mislead by  using other paackage name.   However, even changing the name of my package does not get it past the "suspicion" filter, so you may just download it from here, or clone the repo and build it yourself with `npm ci; npm run package`
 
-\* So technically, it is now packaged, and you will find a .vsix file im the `retree-vscx` directory that you can install; it's just not available in the Marketplace. (see above)
+\* So technically, it is now packaged, and you will find a `.vsix` file im the `retree-vscx` directory that you can install; it's just not available in the Marketplace. (see above)
 
 
 ### golang version
